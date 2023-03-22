@@ -18,13 +18,34 @@ class Main {
     public async start() {
         await this.webServer.start();
     }
+
+    public async checkRepoMonthlyTask() {
+        cron.schedule('1 0 0 0 *', async () => {
+            try {
+                const response = await axios.get('https://api.github.com/user/repos', {
+                    headers: {
+                        Authorization: `Bearer ${process.env.GITHUB_TOKEN}`
+                    }
+                })
+                const data = response.data
+                const projects = []
+                for (let i = 0; i < data.length; i++) {
+                    const project = {
+                        name: data[i].name
+                    }
+                    projects.push(project)
+                }
+                const count = projects.length
+                fs.writeFileSync('projectsCountMonth.txt', count.toString())
+            } catch (error) {
+                throw error
+            }
+        })
+
+    }
 }
 
 const main = new Main();
 main.start();
 
-// cron.schedule('1 0 0 0 *', () => {
-//     fs.writeFileSync('projectsCountMonth.txt', count.toString())
-// })
-//
-//
+
