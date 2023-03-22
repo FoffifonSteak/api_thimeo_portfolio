@@ -22,6 +22,7 @@ class Main {
 
     public async checkRepoMonthlyTask() {
         cron.schedule('0 0 1 * 0', async () => {
+            console.log('running a task every month')
             try {
                 const response = await axios.get('https://api.github.com/user/repos', {
                     headers: {
