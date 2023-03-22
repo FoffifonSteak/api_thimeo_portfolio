@@ -1,5 +1,6 @@
 import axios from "axios";
 import {RouteOptions} from "fastify";
+import * as fs from "fs";
 
 
 export function statsRoute(): RouteOptions {
@@ -69,8 +70,13 @@ async function projects() {
             }
             projects.push(project)
         }
+
         const count = projects.length
-        return {count}
+        const lastMonthlyCount = fs.readFileSync('projectsCountMonth.txt').toString()
+        const differenceBetweenMonth = count - parseInt(lastMonthlyCount)
+
+        return {count, differenceBetweenMonth}
+
     } catch (error) {
         return error
     }

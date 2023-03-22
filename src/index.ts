@@ -17,10 +17,11 @@ class Main {
 
     public async start() {
         await this.webServer.start();
+        await this.checkRepoMonthlyTask()
     }
 
     public async checkRepoMonthlyTask() {
-        cron.schedule('1 0 0 0 *', async () => {
+        cron.schedule('0 0 1 * 0', async () => {
             try {
                 const response = await axios.get('https://api.github.com/user/repos', {
                     headers: {
